@@ -1,0 +1,132 @@
+JARGONS -
+Upstream systems, Downstream systems, SIngle source of Truth (gold layer),Medallion Architecture
+
+
+Incremental load: https://www.youtube.com/watch?v=q6eqH22SGBE&ab_channel=WafaStudies
+Initial questions
+===================
+
+1] What's your team-size?
+Our team consists of 8 members, including data engineers, data scientists, and a project manager. This diverse team structure ensures that we can tackle data engineering challenges from multiple perspectives and collaborate efficiently on complex projects.
+
+Follow-up Question: How do you ensure effective collaboration within your team?
+
+Answer: We use agile methodologies, holding daily stand-ups and regular sprint planning meetings to ensure everyone is aligned. We also leverage collaboration tools like Microsoft Teams and Azure DevOps to keep track of progress and communicate effectively. Code reviews and pair programming are also integral parts of our process to ensure high-quality code and shared knowledge among team members.
+
+2] How many pipelines do you have in your project?
+In our current project, we have around 25 data pipelines. These pipelines handle various data ingestion, transformation, and loading tasks, ensuring that our data flows seamlessly from source systems to our analytics platform.
+
+Follow-up Question: Can you describe a particularly challenging pipeline you worked on and how you handled it?
+
+Answer: One of the most challenging pipelines involved integrating data from multiple on-premises and cloud sources, each with different formats and update frequencies. We used Azure Data Factory to orchestrate the data ingestion and transformation processes. The key challenge was handling data inconsistencies and ensuring data quality. We implemented robust error handling, data validation, and transformation logic to ensure the data was consistent and reliable before it was loaded into our analytics platform.
+
+3] How much GB of data do you get per pipeline?
+On average, each pipeline handles between 50 to 100 GB of data daily. This data volume varies depending on the source system and the specific requirements of each pipeline.
+
+Follow-up Question: How do you handle performance issues when dealing with large data volumes?
+
+Answer: We address performance issues by optimizing our data pipelines through techniques like partitioning, indexing, and caching. Azure Synapse Analytics and Azure Data Lake Storage play crucial roles in handling large volumes of data efficiently. Additionally, we continuously monitor pipeline performance using Azure Monitor and adjust configurations as needed to ensure optimal performance.
+
+4] How would you move your code from one environment to another?
+
+Follow-up Question: Can you explain a situation where you encountered an issue during deployment and how you resolved it?
+
+Answer: During a deployment, we once encountered an issue where a configuration file was missing, causing the pipeline to fail. We quickly identified the missing file through our automated tests and error logs. To resolve this, we added a pre-deployment step in our CI/CD pipeline to validate all necessary configurations and dependencies. We also conducted a thorough review to ensure all environments were consistent and correctly configured, preventing similar issues in the future.
+
+
+
+Azure-based questions
+======================
+1] Explain about yourself with details about roles and responsibilities.
+As an Azure Data Engineer, I specialize in designing, implementing, and managing data solutions using Azure services. My responsibilities include creating and maintaining data pipelines using Azure Data Factory, performing ETL processes, managing big data using Azure Synapse Analytics, ensuring data security and compliance, and optimizing data storage and retrieval.
+
+2] Difference between Control Plane and Data Plane. What services/resources will come under Control Plane and Data Plane.
+The Control Plane manages the configuration, deployment, and overall management of resources. Examples include Azure Resource Manager (ARM), Azure Portal, and Azure CLI. The Data Plane handles the actual data processing, storage, and retrieval. Examples include Azure Storage, Azure SQL Database, and Azure Synapse Analytics.
+
+3] If you create a cluster with 4 VMs, in which Plane will they be allocated? Control Plane or Data Plane.
+The cluster with 4 VMs will be allocated in the Data Plane, as it is used for data processing and computations.
+
+4] Tell me all the ADF Activities you know/used?
+Some ADF activities include Copy Activity, Data Flow Activity, Lookup Activity, Execute Pipeline Activity, Get Metadata Activity, Stored Procedure Activity, and Web Activity.
+
+5] There is a container with many files in different formats such as JSON, CSV, and Excel. How do you create a single pipeline to copy all these different files to a destination folder in ADF?
+In Azure Data Factory, you can create a single pipeline by using multiple Copy Activities, each configured to handle different file formats. You can utilize wildcard characters and dataset parameters to dynamically identify and process the files from the container, ensuring they are copied to the destination folder.
+
+6] What is the difference between data lake and delta lake?
+Data Lake is a storage repository that can hold large amounts of raw data in its native format until needed. Delta Lake builds on top of data lakes, adding features such as ACID transactions, scalable metadata handling, and unified batch and streaming data processing.
+
+7] In which scenario do you consider using Data Flow or Databricks for transformations/processing?
+Use Azure Data Factory Data Flow for visual data transformations and simpler ETL tasks. Opt for Databricks when dealing with complex data processing, large-scale data transformation, and advanced analytics using Spark.
+
+8] What is the difference between Spark Context and Spark Session? When do you use each?
+Spark Context is the entry point for accessing Spark's functionalities and creating RDDs. Spark Session is a unified entry point for reading data, managing resources, and running Spark SQL queries. Use Spark Session in Spark 2.0+ for a unified API to interact with all Spark functionalities.
+
+9] How do you ensure data security and compliance in your data pipelines?
+We implement data encryption both at rest and in transit using Azure Key Vault for managing keys and secrets. Role-based access control (RBAC) ensures that only authorized personnel have access to sensitive data. Additionally, we regularly audit our systems and follow compliance frameworks like GDPR and HIPAA to ensure data protection and regulatory adherence.
+
+10] Can you describe a time when you had to optimize a data pipeline for better performance? What steps did you take?
+We had a pipeline that was experiencing significant lag due to large batch processing. To optimize it, we implemented incremental data loads using Azure Data Factory's Delta Lake capabilities. We also partitioned the data and utilized parallel processing, which reduced the overall processing time by 60%. Continuous performance monitoring helped us make further adjustments as needed.
+
+11] Can you describe a situation where you had to troubleshoot a complex data pipeline issue? How did you resolve it?
+We encountered an issue where a pipeline was failing intermittently due to data format inconsistencies from an external source. To resolve it, we implemented robust error handling and retry logic in Azure Data Factory. We also set up a data validation step to ensure that incoming data met the required format and schema before processing. By collaborating with the external data provider, we improved data consistency and reduced pipeline failures.
+
+12] If source has changed the schema i.e. added 2 columns, will your pipeline fails if you are using COPY activity?
+Pipeline will not get fail, once the data gets in bronze layer, we can write the data into delta table using option of MergeSchema wile writing to delta tables in silver layer.
+
+13] Pushing ADF code to other environment?
+1] Create new branch within ADF, we make required changes in the dev pipeline we do commit. Then we push the code to pre-prod environment. 
+2] Afterwards, we have CICD automations so it automatically deploys to pre-prod environment. 
+3] Once we trigger the pre-prod environment it will run.
+
+14] How to do incremental data load in ADF?
+1] In Source tap in COPY ACTIVITY, using "Filter by Last modified" there is dynamic content, we can add function so we dont hard-code the value.
+2] @adddays(utcnow()-2) will give "current date - 2 days" value and utcnow() will give current date when pipeline runs. 
+
+
+Follow up questions:
+Who trigger it in pre-prod environment?
+-> We do manually triger if the pipeline is unscheduled.
+
+14] You are running pipeline, and its taking longer times while copy data from on-prem to ADLS Gen2?
+->  1] First I will check if the data size is huge eg. we get 1000 rows daily and suddenly unexpected time so we will check the source system if we are getting huge data.
+	2] If the resources are not getting properly for the pipeline to run this job like integration runtime resources
+	
+	
+	
+COPY ACTIVITY:
+
+DIU-
+1] Data Integration Units (DIUs) are included in the Serverless Azure Integration Runtime (IR) when performing copy activities in Azure Data Factory. DIUs represent the compute resources (CPU, memory, and network) allocated to a copy activity1. You can specify between 4 and 256 DIUs for each copy activity, depending on your source and sink data stores, as well as the data pattern
+
+2] When transferring data from on-premises to Azure Data Lake Storage (ADLS) Gen2 using Azure Data Factory (ADF) with a Self-Hosted Integration Runtime (IR), Data Integration Units (DIUs) are not applicable. DIUs are specific to the Serverless Azure Integration Runtime.
+
+In the case of Self-Hosted IR, you would focus on other performance optimization techniques such as:
+
+Parallel Copies: Adjusting the parallelCopies property to distribute the load across multiple nodes.
+Resource Allocation: Ensuring sufficient CPU, memory, and network resources on the self-hosted machines.
+Network Bandwidth: Optimizing network bandwidth between on-premises and Azure to handle data transfer efficiently.
+
+UNION vs FULL OUTER:
+Key Takeaways
+Full Outer Join is useful when you need to see all data from both tables, with nulls for missing values.
+Union is useful when you just need unique values across tables without combining data based on keys or including additional column information.
+In practice:
+
+Use Full Outer Join when you want a complete view of records, showing relationships (or lack of) between tables.
+Use Union when you simply need a set of unique records without concern for joining related data.
+
+PROJECT ARCHITECTURE:
+======================
+
+Data Source systems- 
+Oracle DB & SQL Server
+Cloud - AWS S3
+SFTP Servers
+Kafka 
+REST API
+
+Our project integrates data from various source systems including REST APIs for real-time data feeds, on-premises databases like Oracle and SQL Server, and SFTP servers for secure file transfers. Additionally, we leverage cloud storage on AWS S3 for data archival and use Apache Kafka as a message queue for real-time event streaming from IoT sensors.
+
+If asked how you would handle a row limit from an SFTP source, you could say:
+
+"For data coming from an SFTP server, I’d approach it in two steps. First, I’d copy the file to a staging area. Then, depending on the ETL tool, I’d limit the rows during processing. For instance, in Azure Data Factory, I could use a Data Flow or Filter activity to only select the first 1,000 rows after copying the data. Alternatively, in Spark, I could load the file into a DataFrame and use .limit(1000) to process only those rows. This ensures I only handle the specified subset of rows in the pipeline, optimizing both processing and resources."
