@@ -79,9 +79,13 @@ Pipeline will not get fail, once the data gets in bronze layer, we can write the
 3] Once we trigger the pre-prod environment it will run.
 
 14] How to do incremental data load in ADF?
+1] 
 1] In Source tap in COPY ACTIVITY, using "Filter by Last modified" there is dynamic content, we can add function so we dont hard-code the value.
 2] @adddays(utcnow()-2) will give "current date - 2 days" value and utcnow() will give current date when pipeline runs. 
 
+2]
+1] Using 2 lookup tables, "extracting lastupdate date" by using max clause  and "extracting lastload date"  .
+2] Use COPY activity, connecting 2 looku tables to the activity, using query option "select * from xyx where last_m >= xyx and last_m > xyz_2"
 
 Follow up questions:
 Who trigger it in pre-prod environment?
@@ -130,3 +134,4 @@ Our project integrates data from various source systems including REST APIs for 
 If asked how you would handle a row limit from an SFTP source, you could say:
 
 "For data coming from an SFTP server, I’d approach it in two steps. First, I’d copy the file to a staging area. Then, depending on the ETL tool, I’d limit the rows during processing. For instance, in Azure Data Factory, I could use a Data Flow or Filter activity to only select the first 1,000 rows after copying the data. Alternatively, in Spark, I could load the file into a DataFrame and use .limit(1000) to process only those rows. This ensures I only handle the specified subset of rows in the pipeline, optimizing both processing and resources."
+
