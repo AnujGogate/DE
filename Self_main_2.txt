@@ -84,7 +84,7 @@ Pipeline will not get fail, once the data gets in bronze layer, we can write the
 2] @adddays(utcnow()-2) will give "current date - 2 days" value and utcnow() will give current date when pipeline runs. 
 
 2]
-1] Using 2 lookup tables, "extracting lastupdate date" by using max clause  and "extracting lastload date"  .
+1] Using 2 lookup tables, "extracting lastupdate date" by using max clause  and "extracting lastload date". We got 1 row of date from each of lookup table.
 2] Use COPY activity, connecting 2 looku tables to the activity, using query option "select * from xyx where last_m >= xyx and last_m > xyz_2"
 
 Follow up questions:
