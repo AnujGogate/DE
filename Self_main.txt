@@ -163,9 +163,78 @@ Features of Tumbling window:
 1] It supports ACID compliance and its helpful in big data analytics. Effectivity doing DML operations i.e. insert, update, delete.
 2] It suppports time travel features, version features.
 
+17] How do you manage schema changes in your data pipeline?
+-> Dynamic Schema Handling in pipeline:
+i] ADF
+In a Mapping Data Flow, you can enable "Allow Schema Drift" to ensure your pipeline adapts to changes such as a new column being added to a CSV file.
+ii] pyspark
+Use flexible data formats like Delta Lake, which supports schema evolution and versioning.
+Use mergeSchema during read operations to merge new schema changes into the existing dataset dynamically.
+"df = spark.read.format("delta").option("mergeSchema", "true").load("path_to_delta_table")"
+"df.write.option("mergeSchema", "true").format("delta").save("path_to_table")
+"df.write.option("mergeSchema", "true").format("delta").save("path_to_table")"
+
 Follow up questions:
 Do you really need to delta tables in your project?
 -> 1] To check whatever the new changes happened in delta table 
 
 Pipeline parameters are runtime paramaters while executing pipeline.
 Global parameters available on pipeline level.
+
+1. How Many Pipelines You Manage?
+If you handle 7-10GB of data daily, the number of pipelines would depend on how the data is structured, the sources, and the processing requirements. For example, if data comes from different sources like transactional databases, APIs, or batch files, you could mention handling around 5-10 pipelines daily.
+
+Explain that each pipeline may represent different stages like data ingestion, transformation, validation, and loading into a data warehouse or data lake, with some designed for daily processing and others possibly for incremental or hourly loads.
+
+2. Total Monthly Data Across the Team
+If you individually handle 7-10GB of data per day, it would mean you’re processing approximately 210-300GB of data per month (7-10GB * 30 days).
+
+With 7 Data Engineers working at a similar scale, the team might manage 1.47TB to 2.1TB of data monthly.
+
+3. Realistic Answer
+You can say something like:
+"In my current role, I work with a team of seven Data Engineers, and we collectively manage around 1.5 to 2TB of data monthly. Personally, I handle 7-10GB of data daily, which involves managing 5-10 pipelines that cover the full data lifecycle from ingestion to processing in our Azure Data Lake. Each pipeline may differ based on the source and processing requirements, ensuring our data remains structured and available for business needs."
+
+This response demonstrates awareness of the team effort, data volume, and complexity in managing multiple pipelines.
+
+Initial follow up questions
+============================
+1. Can you describe the types of pipelines you manage?
+Tip: Mention specific types of pipelines, such as batch processing, streaming, or real-time ingestion, depending on your experience. Describe steps like ingestion, transformation, data validation, and loading into Azure Data Lake or a warehouse.
+Example Answer: "I primarily work with batch pipelines to process daily data dumps, which include ingestion from sources like SQL databases and cloud storage, transformation using PySpark, and validation. We also have incremental pipelines for updates, where only modified data gets processed to save costs and improve performance."
+
+2. How do you ensure data quality in your pipelines?
+Tip: Discuss data quality checks like schema validation, data profiling, handling missing values, and using tools or custom scripts for validation.
+Example Answer: "We implement data validation steps to check schema compatibility and use regex or range checks to ensure data consistency. We also use Azure Data Factory for setting up validation steps at various stages and Databricks to handle transformations and cleanse data."
+
+3. What Azure services do you use in your pipelines?
+Tip: Mention services like Azure Data Factory, Azure Databricks, Azure Data Lake Storage (ADLS), Azure Synapse Analytics, and Azure Monitor for pipeline monitoring and optimization.
+Example Answer: "Our pipelines are built using Azure Data Factory for orchestration, Azure Databricks for heavy data transformations in PySpark, and Azure Data Lake Storage for storing raw and processed data. We also leverage Azure Synapse for analysis and reporting, and Azure Monitor for tracking pipeline health."
+
+4. What challenges have you faced while managing such large data volumes?
+Tip: Share challenges like performance tuning, handling schema evolution, or troubleshooting failed jobs.
+Example Answer: "One challenge was optimizing the performance of PySpark jobs on Databricks as the data volume grew. We addressed this by partitioning the data better and optimizing joins and aggregations, which improved processing time by around 30%."
+
+5. How do you optimize pipelines for performance and cost efficiency?
+Tip: Discuss cost-saving strategies like using cluster autoscaling in Databricks, managing data storage tiers in ADLS, and processing only incremental changes when possible.
+Example Answer: "We optimize pipelines by using Spark caching in Databricks for frequently accessed data, adjusting cluster sizes based on job complexity, and implementing data partitioning and pruning to reduce unnecessary data scans. We also leverage Azure Data Lake's tiered storage to manage costs."
+
+6. How do you monitor and handle pipeline failures?
+Tip: Talk about using Azure Monitor, custom alerts, logging in Azure Databricks, and retry policies for failed jobs.
+Example Answer: "We use Azure Monitor to set up alerts for job failures and performance degradation, and we apply logging within Databricks notebooks to track the steps in each pipeline. If a pipeline fails, we analyze logs, identify the root cause, and use retry policies to reprocess failed data."
+
+7. What is your approach to handling data schema changes in a pipeline?
+Tip: Describe methods like schema versioning, using DataFrames in PySpark, or implementing schema drift in Azure Data Factory.
+Example Answer: "We handle schema changes by defining schema checks at the start of each pipeline. In cases of schema drift, we use the schema drift features in Azure Data Factory and have created scripts in PySpark to accommodate new fields or types, ensuring downstream systems aren't impacted."
+
+8. How do you manage incremental data loads?
+Tip: Explain how you identify changes and load only modified data using watermarking or timestamps.
+Example Answer: "We use a watermarking technique that relies on timestamps to capture only new or modified records. This method helps us handle large datasets efficiently, especially when loading data into our data lake or warehouse, as it avoids full data reloads and reduces processing costs."
+
+9. How does your team collaborate on such large projects?
+Tip: Mention task distribution, code reviews, version control, and using tools like Azure DevOps.
+Example Answer: "We divide tasks based on expertise, conduct regular code reviews for best practices, and use Azure DevOps for version control. This setup enables smooth collaboration and consistency across the team, especially as we manage high-volume data processing."
+  
+10. How do you document your data pipelines?
+Tip: Highlight using wikis, markdown files in version control, and automated documentation tools in Azure.
+Example Answer: "We maintain documentation on Azure DevOps, including pipeline steps, configurations, and known issues, ensuring all team members have access to up-to-date information. Additionally, we generate automated pipeline diagrams to make it easy to understand dependencies and workflows."
