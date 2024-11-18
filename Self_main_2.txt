@@ -135,3 +135,80 @@ If asked how you would handle a row limit from an SFTP source, you could say:
 
 "For data coming from an SFTP server, I’d approach it in two steps. First, I’d copy the file to a staging area. Then, depending on the ETL tool, I’d limit the rows during processing. For instance, in Azure Data Factory, I could use a Data Flow or Filter activity to only select the first 1,000 rows after copying the data. Alternatively, in Spark, I could load the file into a DataFrame and use .limit(1000) to process only those rows. This ensures I only handle the specified subset of rows in the pipeline, optimizing both processing and resources."
 
+BRIDGENEXT INTERVIEW QUESTIONS:
+================================
+Reading data:
+df_1 = spark.read.format("csv").option("header", "true").schema(schema).load("path")
+
+df_2 = spark.read.format("json").option("header", "true").schema(schema).load("path")
+
+df_3 = spark.read.format("parquet").load("path")
+
+1] Remove nulls from dataframe
+df2 = df_1.dropna(subset = ["customer_id")
+
+df_2.withColumn("orders_date",when(col("orders_date").isNull(),"01-01-20")
+
+df_2.fillna("01-01-20",subset = ["customer_id")
+
+2] Calculate the total number of orders which needs to be greater than 3 and order_amt greater than 10000
+
+Cust_id, order_date, order_amt, orders
+
+df_3.groupBy("Cust_id").agg(count("*").alias("total_cnt"),sum("order_amt").alias("total_amt").filter((col("total_cnt") > 3) & (col("total_amt") > 10000))
+		
+3] Checking the temperature of the next row and seaching for greater value
+Id(INT)	RecordDate(DATE)	Temperature(INT)
+1	     2024-01-01	      36
+2	     2024-01-02	      35
+3	     2024-01-03	      34
+4	     2024-01-04	      35
+
+with test1 as 
+("select Id, RecordDate(DATE), Temperature(INT),
+lead() over (partition by RecordDate(DATE) order by Temperature(INT)) as row_check from table"),
+test2 as 
+("select * from test1 where row_check > Temperature(INT)")
+
+4] Check which employee salary is greater than manager's salary?
+
+id	name	salary	ManagerId
+1	A	90000	      3
+2	B	80000	      4 
+3	C	60000	      NULL
+4	D	110000	NULL
+
+Using Self-join: Compare employee salary with manager salary
+
+5] Taking example of 4], if we need to search for duplicate records?
+Can use window_aggregation or count 
+
+
+Questions:
+1] Which fileformats you used in your project?
+
+Follow up questions:
+i] Difference between CSV & Parquet file format?
+ii] Any other file format you have used?
+
+
+2] What is purview in ADF?
+3] How to run pipeline on Azure Databricks?
+4] How to connect dependencies between Notebooks to run after one another?
+5] How many types of triggers & explain the differences?
+6] What is unity catalog in Databricks?
+7] Do you know about Caveat?
+8] Do you know about lookup, foreach activity?
+9] what type of activity you do on silver layer? 
+
+
+Aggregations questions:
+1] How to insert rows without apending as it can lead to duplication and can't use overwrite as it can fully overwrite the file. Making sure inserted rows is unqiue and can be ignored if source have the row?
+-> 1] Using Caveat
+   2] Using left-anti or where clause 
+
+
+Tip:
+Make detailed of each report of what you did in your project
+e.g: silver layer (changing datatypes, removing null, dropping duplicates and othersa)
+
