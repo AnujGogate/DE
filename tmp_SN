@@ -1,0 +1,82 @@
+SCD type 2 \ 1
+Data integrity, unique key
+window function lead,lag,row.
+SQL managment
+python data structs 
+yield returns
+memory optimaztion
+data bricks cluster unitycatalog
+calling notebooks
+autoloader syntax hive
+azure runtime, copy activity, azure workloads, CICD understanding, agile different methodligies
+
+Gaps SQL code pyspark co
+
+shallow, syntax issue, spark AQE, lineage, watermarking, azure 
+setup ADF
+
+SQL complex queries
+
+struggling json, cluster types, mount points, unity catalog, autoloade, star stages, AQE
+
+CICD
+Git hub/Jenkins
+
+Agile mehtodiligies, how it work? scrum calls, status calls? which yu are using?
+
+testing
+
+Delta live tables,
+
+Azure architure
+
+Azure vaccum,optimize,blob,azure adls gen2, notebooks, 
+
+delta table, external tables, storage levels in cloud
+
+Job in all purpose clusters, trigger ADF, data pipeline, designing
+
+DLT, oracle DB, medallion architecture
+
+star/dimenaion
+
+OLAP, oltp, cte, NORMALIZATION, predicate ousdhow, coalse, join aggregation window function, primary key foreign key
+
+Differenft of spark, physica plan, SCD implementation, shuffling,, DS in spark & python, lag or, num, star vs snowflakes schema, drifting, cache & persist
+
+narrow vs wide partitions, immutable vs mutable, AQE, scheduling null partitions, dict/tuple/set/ decorates
+
+unit testing, python oops concept, use avro/parquet
+
+===========================================================================================================================================
+
+DLT
+===
+
+Landing Zone (Raw data in CSV format) > Bronze layer (creating DLT) > Silver Layer (2 stages, cleaning & SCD type 2) > Gold Layer (Aggregating data)
+
+AUTOLOADER uses notification services, it will take only latest data rather scanning all data. we can use "cloud_files" parameter for the same
+
+
+CREATE STREAMING live(optional) table1;
+
+streaming - to manage incremental approach/ incremental load 
+
+Usage of layer-
+Bronze layer -> DE (it ha all data)
+Silver layer -> DS (cleaned data)
+Gold layer -> BA for the visualization
+
+We use materialized view rather DLT in gold layer as we want to aggregate data not to work on incremental changes rather full data. SO we focus on loading full data.
+
+In Databricks Delta Live Tables features under are only in Premium subscription.
+If we certain constraints you need to choose Advance version.
+
+We need to only create pipeline under Azure Delta Live Tables options no Job-compute cluster or other cluster is supported for DLT.
+In DLT pipelines, we have option like triggered and Continuos as pipeline modes and option to chose metastore i.e. Hive Metastore or Unity Catalog
+
+Hive metastore is local which stays under only on a workspace level whereas Unity Catalog is centralized where all workspace can connect to Unity Catalog.
+
+We have options like Enhanced Auto-scaling, Legacy Auto-scaling and Fixed Size under Cluster mode options. 
+
+
